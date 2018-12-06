@@ -2,13 +2,23 @@
 
 Summary:	Steam Linux Client
 Name:		steam
-Version:	1.0.0.55
+Version:	1.0.0.56
 Release:	1
 Group:		Games/Other
 License:	Proprietary
 URL:		https://github.com/ValveSoftware/steam-for-linux
 Source0:	http://repo.steampowered.com/steam/pool/steam/s/steam/%{name}_%{version}.tar.gz
+
+# Input devices seen as joysticks:
+Source8:        https://raw.githubusercontent.com/denilsonsa/udev-joystick-blacklist/master/after_kernel_4_9/51-these-are-not-joysticks-rm.rules
+# First generation Nvidia Shield controller seen as mouse:
+Source9:        https://raw.githubusercontent.com/cyndis/shield-controller-config/master/99-shield-controller.rules
+
 Patch0:		steam-use-our-own-libraries.patch
+# Make Steam Controller usable as a GamePad:
+# https://steamcommunity.com/app/353370/discussions/0/490123197956024380/
+Patch1:         %{name}-controller-gamepad-emulation.patch
+
 Requires:	alsa-lib
 Requires:	awk
 Requires:	coreutils
@@ -81,7 +91,10 @@ rm -rf TMP
 
 # Rename steamdeps, it's not working on non-Debian based distros
 mv -f %{buildroot}%{_bindir}/steamdeps %{buildroot}%{_bindir}/steamdeps.save
-install -D -m644 lib/udev/rules.d/99-steam-controller-perms.rules %{buildroot}%{_udevrulesdir}/99-steam-controller-perms.rules
+install -D -m644 lib/udev/rules.d/60-steam-input.rules %{buildroot}%{_udevrulesdir}/60-steam-input.rules
+
+install -m 644 -p lib/udev/rules.d/* \
+    %{SOURCE8} %{SOURCE9} %{buildroot}%{_udevrulesdir}/
 
 %files
 %doc %{_docdir}/*
@@ -91,4 +104,4 @@ install -D -m644 lib/udev/rules.d/99-steam-controller-perms.rules %{buildroot}%{
 %{_datadir}/pixmaps/steam*.png
 %{_iconsdir}/hicolor/*/apps/steam.*
 %{_mandir}/man6/steam.6.*
-%{_udevrulesdir}/99-steam-controller-perms.rules
+%{_udevrulesdir}/*.rules
