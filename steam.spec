@@ -77,7 +77,7 @@ Launcher for the Valve's Steam software distribution service.
 # specific option)
 mkdir TMP
 cd TMP
-tar xf ../bootstraplinux_ubuntu12_32.tar.xz
+tar xvf ../bootstraplinux_ubuntu12_32.tar.xz
 sed -i -e 's,tar --blocking,gtar --blocking,g' steam.sh
 rm -rf	ubuntu12_32/steam-runtime/i386/lib/i386-linux-gnu/libgcc_s* \
 	ubuntu12_32/steam-runtime/i386/usr/lib/i386-linux-gnu/lib*
