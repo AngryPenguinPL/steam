@@ -62,7 +62,7 @@ Requires:	libsm6
 Requires:	libice6
 # Add some restricted package to Suggests
 Suggests:	libtxc-dxtn
-ExclusiveArch:	%{ix86}
+#ExclusiveArch:	%{ix86}
 
 %description
 Launcher for the Valve's Steam software distribution service.
